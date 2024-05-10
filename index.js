@@ -17,3 +17,7 @@ app.listen(port, (req, res) => {
   console.log(`App started running on port ${port}.`);
   console.log(process.env.API_KEY);
 });
+
+app.get("/", (req, res) => {
+  res.render("index.ejs");
+});
