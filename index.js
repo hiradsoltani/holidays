@@ -16,7 +16,6 @@ app.use(express.static("public"));
 
 app.listen(port, (req, res) => {
   console.log(`App started running on port ${port}.`);
-  console.log(process.env.API_KEY);
 });
 
 app.get("/", (req, res) => {
@@ -29,17 +28,21 @@ app.post("/", async (req, res) => {
     const response = await axios.get(process.env.API_BASE_URL, {
       params: {
         api_key: process.env.API_KEY,
-        country: "US",
-        year: "2020",
-        day: "25",
+        country: req.body.country,
+        year: req.body.year,
+        month: 12,
+        day: 21,
       },
     });
-    console.log("response");
-    console.log(response.data);
-    res.send(response.data);
+    console.log("%%%%");
+    console.log(response.data.error);
+
+    res.render("index.ejs", {
+      data: response.data,
+      error: response.data.error,
+    });
   } catch (error) {
-    log.error(error.message);
-    res.status(500);
+    log.error(error);
+    res.render("index.ejs", { error });
   }
-  res.render("index.ejs");
 });
